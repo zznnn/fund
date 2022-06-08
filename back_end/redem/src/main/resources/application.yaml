@@ -1,0 +1,12 @@
+server:
+  port: 9092
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/hsfund?serverTimezone=GMT%2b8&allowMultiQueries=true
+    username: root
+    password:
+
+mybatis:
+  type-aliases-package: com.example.redem.entity
+  mapper-locations: classpath:mapper/*.xml

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.ProductMapper">
+    <update id="update">
+        update fund
+        <set>
+<!--            <if test="fundCode != null">-->
+<!--                fund_code = #{fundCode},-->
+<!--            </if>-->
+            <if test="fundName != null">
+                fund_name = #{fundName},
+            </if>
+            <if test="fundNetvalue != null">
+                fund_netvalue = #{fundNetvalue},
+            </if>
+            <if test="fundRisk != null">
+                fund_risk = #{fundRisk},
+            </if>
+            <if test="fundBirth != null">
+                fund_birth = #{fundBirth},
+            </if>
+            <if test="fundTrustee != null">
+                fund_trustee = #{fundTrustee},
+            </if>
+            <if test="fundManager != null">
+                fund_manager = #{fundManager},
+            </if>
+            <if test="fundCurrency != null">
+                fund_currency = #{fundCurrency},
+            </if>
+            <if test="fundOthers != null">
+                fund_others = #{fundOthers},
+            </if>
+        </set>
+        <where>
+            fund_code = #{fundCode}
+        </where>
+    </update>
+
+</mapper>

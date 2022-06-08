@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.redem.mapper.PurchaseMapper">
+    <select id="findAll" resultType="com.example.redem.entity.purchaseResult">
+        select c.client_id as clientId,
+        c.client_name as clientName,
+        c.client_risk as clientRisk,
+        b.bank_account as bankAccount,
+        b.bank_current_balance as bankCurrentBalance,
+        f.fund_code as fundCode,
+        f.fund_name as fundName,
+        f.fund_risk as fundRisk,
+        d.date_time as purchaseDate
+        from bank b,
+        client c,
+        fund f,
+        date d
+        where f.fund_code like #{fundCode}
+        and c.client_id like #{clientId}
+        and c.client_id = b.client_id
+    </select>
+
+    <insert id="savepurchase"  parameterType="com.example.redem.entity.Purchase">
+        insert into purchase(purchase_id,client_id,bank_account,fund_code,purchase_date,purchase_count,purchase_share,purchase_status)
+        values((select CONCAT(DATE_FORMAT(#{purchaseDate},'%Y%m%d'),'PNULL')),#{clientId},#{bankAccount},#{fundCode},#{purchaseDate},#{purchaseCount},0,"申请中");
+
+        insert into bank_jour(bank_jour_id,bank_account,bank_change)
+        values((select CONCAT(DATE_FORMAT(#{purchaseDate},'%Y%m%d'),'BNULL')),#{bankAccount},-abs(#{purchaseCount}))
+    </insert>
+
+    <update id="updatepurchase" parameterType="com.example.redem.entity.Purchase">
+        update purchase
+        set
+        purchase_id=(select CONCAT(DATE_FORMAT(purchase_date,'%Y%m%d'),'P',right(concat('000',id),4)))
+        where purchase_id=(select CONCAT(DATE_FORMAT(#{purchaseDate},'%Y%m%d'),'PNULL'));
+
+        update bank
+        set
+        bank_current_balance=bank_current_balance-#{purchaseCount}
+        where bank_account=#{bankAccount};
+
+        update bank_jour
+        set
+        bank_jour_id=(select CONCAT(DATE_FORMAT(#{purchaseDate},'%Y%m%d'),'B',right(concat('000',id),4)))
+        where bank_jour_id=(select CONCAT(DATE_FORMAT(#{purchaseDate},'%Y%m%d'),'BNULL'))
+    </update>
+
+</mapper>

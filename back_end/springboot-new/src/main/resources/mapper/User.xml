@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.UserMapper">
+
+    <update id="update">
+        update client
+        <set>
+            <if test="clientName != null">
+                client_name = #{clientName},
+            </if>
+            <!--            <if test="password != null">-->
+            <!--                password = #{password}-->
+            <!--            </if>-->
+            <if test="clientGender != null">
+                client_gender = #{clientGender},
+            </if>
+            <if test="clientAge != null">
+                client_age = #{clientAge},
+            </if>
+            <if test="clientOrganFlag != null">
+                client_organ_flag = #{clientOrganFlag},
+            </if>
+            <if test="clientIdKind != null">
+                client_id_kind = #{clientIdKind},
+            </if>
+            <if test="clientPhnumber != null">
+                client_phnumber = #{clientPhnumber},
+            </if>
+            <if test="clientRisk != null">
+                client_risk = #{clientRisk}
+            </if>
+        </set>
+        <where>
+            client_id = #{clientId}
+        </where>
+    </update>
+
+    <insert id="save" parameterType="com.example.demo.entity.User">
+        insert into client(client_id,client_name,client_gender,client_age,client_organ_flag,client_id_kind,client_phnumber,client_risk)
+        values(#{clientId},#{clientName},#{clientGender},#{clientAge},#{clientOrganFlag},#{clientIdKind},#{clientPhnumber},#{clientRisk});
+
+        insert into bank(bank_account,client_id,bank_current_balance)
+        values(#{bankAccount},#{clientId},#{bankCurrentBalance})
+    </insert>
+</mapper>
